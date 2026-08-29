@@ -1,0 +1,16 @@
+env/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+backend/data/*.db
+backend/uploads/images/*
+backend/uploads/heatmaps/*
+!backend/uploads/images/.gitkeep
+!backend/uploads/heatmaps/.gitkeep
+
+ml/data/images/
+ml/data/labels.csv
+
+.env
+node_modules/

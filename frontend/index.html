@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Image Quality &amp; Defect Detection</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <h1>Image Quality &amp; Defect Detection</h1>
+          <p class="tagline">Hybrid engineered-feature + learned-model analysis — no external AI APIs</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span id="health-dot" class="health-dot" title="Checking backend..."></span>
+        <span id="health-text" class="health-text">checking…</span>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="analyze">Analyze</button>
+      <button class="tab-btn" data-tab="history">History</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- ANALYZE TAB -->
+    <section id="tab-analyze" class="tab-panel active">
+      <div class="grid-2">
+        <div class="panel">
+          <h2>Upload image(s)</h2>
+          <div id="dropzone" class="dropzone">
+            <input id="file-input" type="file" accept="image/*" multiple hidden />
+            <div class="dropzone-content">
+              <span class="dropzone-icon">⬆</span>
+              <p><strong>Click to browse</strong> or drag &amp; drop</p>
+              <p class="hint">JPEG, PNG, WebP, BMP, TIFF · up to 15MB each · select multiple for batch analysis</p>
+            </div>
+          </div>
+
+          <div id="selected-files" class="selected-files" hidden></div>
+
+          <button id="analyze-btn" class="btn btn-primary" disabled>Analyze</button>
+          <div id="error-banner" class="error-banner" hidden></div>
+        </div>
+
+        <div class="panel">
+          <h2>Result</h2>
+          <div id="result-empty" class="empty-state">
+            <p>Upload an image and click <strong>Analyze</strong> to see its quality assessment here.</p>
+          </div>
+          <div id="loading" class="loading" hidden>
+            <div class="spinner"></div>
+            <p>Running feature extraction, classifiers &amp; anomaly model…</p>
+          </div>
+          <div id="result-single" hidden></div>
+          <div id="result-batch" hidden></div>
+        </div>
+      </div>
+
+      <div class="panel info-panel">
+        <details open>
+          <summary>
+            <span>What this tool analyzes</span>
+            <span class="chevron">▾</span>
+          </summary>
+
+          <p class="info-intro">
+            Every upload runs through the same pipeline: 12 engineered image statistics are computed,
+            fed into 6 independent gradient-boosted classifiers (one per issue below), and combined into
+            a 0–100 quality score. A separate lightweight autoencoder adds a reconstruction-error
+            heatmap for localization/explainability. No external AI APIs are used — every model runs
+            locally.
+          </p>
+
+          <div class="section-title">Detection categories</div>
+          <div class="factor-grid">
+            <div class="factor-card">
+              <span class="factor-icon">🌫️</span>
+              <div><strong>Blur / sharpness</strong><p>Laplacian variance &amp; Tenengrad gradient magnitude — low values mean few sharp edges.</p></div>
+            </div>
+            <div class="factor-card">
+              <span class="factor-icon">🌑</span>
+              <div><strong>Underexposure</strong><p>Share of near-black pixels and overall brightness mean.</p></div>
+            </div>
+            <div class="factor-card">
+              <span class="factor-icon">☀️</span>
+              <div><strong>Overexposure</strong><p>Share of clipped near-white pixels and elevated brightness.</p></div>
+            </div>
+            <div class="factor-card">
+              <span class="factor-icon">📶</span>
+              <div><strong>Noise</strong><p>Immerkær fast noise-variance estimate from a Laplacian-kernel convolution.</p></div>
+            </div>
+            <div class="factor-card">
+              <span class="factor-icon">🧩</span>
+              <div><strong>Corruption</strong><p>Blockiness, entropy, and edge-density patterns typical of heavy compression or transmission damage.</p></div>
+            </div>
+            <div class="factor-card">
+              <span class="factor-icon">🩹</span>
+              <div><strong>Defect</strong><p>Texture/edge irregularities consistent with scratches, spots, or sensor defects.</p></div>
+            </div>
+          </div>
+
+          <div class="section-title">12 image statistics computed per upload</div>
+          <div class="factor-groups">
+            <div class="factor-group">
+              <h4>Sharpness</h4>
+              <ul><li>Laplacian variance</li><li>Tenengrad gradient magnitude</li></ul>
+            </div>
+            <div class="factor-group">
+              <h4>Exposure &amp; contrast</h4>
+              <ul><li>Brightness mean</li><li>Contrast (std. dev.)</li><li>Underexposed pixel ratio</li><li>Overexposed pixel ratio</li></ul>
+            </div>
+            <div class="factor-group">
+              <h4>Noise &amp; texture</h4>
+              <ul><li>Noise sigma</li><li>Entropy</li><li>Edge density</li><li>Blockiness</li></ul>
+            </div>
+            <div class="factor-group">
+              <h4>Color</h4>
+              <ul><li>Colorfulness</li><li>Saturation mean</li></ul>
+            </div>
+          </div>
+
+          <div class="section-title">How the quality score is calculated</div>
+          <p class="info-intro">
+            Starting from 100, each detected issue subtracts <code>weight × severity × confidence</code>
+            (corruption and defect are weighted heaviest since they indicate the most severe problems).
+            <span class="label-badge ACCEPTABLE">ACCEPTABLE</span> means no issues and a score ≥ 75,
+            <span class="label-badge DEFECTIVE">DEFECTIVE</span> means a high-severity corruption/defect
+            or a score below 40, and everything else is
+            <span class="label-badge DEGRADED">DEGRADED</span>.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- HISTORY TAB -->
+    <section id="tab-history" class="tab-panel">
+      <div class="panel">
+        <div class="history-header">
+          <h2>Previous analyses</h2>
+          <button id="refresh-history" class="btn btn-secondary">Refresh</button>
+        </div>
+        <div id="history-empty" class="empty-state" hidden>
+          <p>No analyses yet — results from the Analyze tab will show up here.</p>
+        </div>
+        <div id="history-grid" class="history-grid"></div>
+        <button id="load-more" class="btn btn-secondary" hidden>Load more</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="detail-modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-content">
+      <button class="modal-close" data-close>&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <template id="tpl-issue-card">
+    <div class="issue-card">
+      <div class="issue-head">
+        <span class="issue-type"></span>
+        <span class="severity-badge"></span>
+      </div>
+      <p class="issue-explanation"></p>
+      <div class="confidence-bar"><div class="confidence-fill"></div></div>
+      <p class="confidence-label"></p>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+{
+  "generated_at": "2026-08-29T16:13:27Z",
+  "n_test_samples": 176,
+  "n_test_scenes": 8,
+  "per_issue": {
+    "blur": {
+      "accuracy": 0.8920454545454546,
+      "macro_precision": 0.5888888888888889,
+      "macro_recall": 0.5888888888888888,
+      "macro_f1": 0.5880718954248366,
+      "per_class": {
+        "none": {
+          "precision": 0.9666666666666667,
+          "recall": 0.9666666666666667,
+          "f1": 0.9666666666666667,
+          "support": 150
+        },
+        "low": {
+          "precision": 0.5,
+          "recall": 0.4444444444444444,
+          "f1": 0.47058823529411764,
+          "support": 9
+        },
+        "medium": {
+          "precision": 0.4444444444444444,
+          "recall": 0.4444444444444444,
+          "f1": 0.4444444444444444,
+          "support": 9
+        },
+        "high": {
+          "precision": 0.4444444444444444,
+          "recall": 0.5,
+          "f1": 0.47058823529411764,
+          "support": 8
+        }
+      },
+      "confusion_matrix": [
+        [
+          145,
+          4,
+          1,
+          0
+        ],
+        [
+          2,
+          4,
+          1,
+          2
+        ],
+        [
+          2,
+          0,
+          4,
+          3
+        ],
+        [
+          1,
+          0,
+          3,
+          4
+        ]
+      ]
+    },
+    "underexposure": {
+      "accuracy": 0.9829545454545454,
+      "macro_precision": 0.9528331257783312,
+      "macro_recall": 0.945509893455099,
+      "macro_f1": 0.9478675031656498,
+      "per_class": {
+        "none": {
+          "precision": 0.9931506849315068,
+          "recall": 0.9931506849315068,
+          "f1": 0.9931506849315068,
+          "support": 146
+        },
+        "low": {
+          "precision": 0.8181818181818182,
+          "recall": 0.9,
+          "f1": 0.8571428571428571,
+          "support": 10
+        },
+        "medium": {
+          "precision": 1.0,
+          "recall": 0.8888888888888888,
+          "f1": 0.9411764705882353,
+          "support": 9
+        },
+        "high": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 11
+        }
+      },
+      "confusion_matrix": [
+        [
+          145,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          11
+        ]
+      ]
+    },
+    "overexposure": {
+      "accuracy": 0.8068181818181818,
+      "macro_precision": 0.4679955081414935,
+      "macro_recall": 0.4984265734265734,
+      "macro_f1": 0.48047061634018157,
+      "per_class": {
+        "none": {
+          "precision": 0.948905109489051,
+          "recall": 0.9090909090909091,
+          "f1": 0.9285714285714286,
+          "support": 143
+        },
+        "low": {
+          "precision": 0.15384615384615385,
+          "recall": 0.2,
+          "f1": 0.17391304347826086,
+          "support": 10
+        },
+        "medium": {
+          "precision": 0.38461538461538464,
+          "recall": 0.38461538461538464,
+          "f1": 0.38461538461538464,
+          "support": 13
+        },
+        "high": {
+          "precision": 0.38461538461538464,
+          "recall": 0.5,
+          "f1": 0.43478260869565216,
+          "support": 10
+        }
+      },
+      "confusion_matrix": [
+        [
+          130,
+          9,
+          1,
+          3
+        ],
+        [
+          5,
+          2,
+          3,
+          0
+        ],
+        [
+          1,
+          2,
+          5,
+          5
+        ],
+        [
+          1,
+          0,
+          4,
+          5
+        ]
+      ]
+    },
+    "noise": {
+      "accuracy": 0.9090909090909091,
+      "macro_precision": 0.7282075563325563,
+      "macro_recall": 0.6678321678321678,
+      "macro_f1": 0.6937949147127127,
+      "per_class": {
+        "none": {
+          "precision": 0.9652777777777778,
+          "recall": 1.0,
+          "f1": 0.9823321554770318,
+          "support": 139
+        },
+        "low": {
+          "precision": 0.5384615384615384,
+          "recall": 0.5384615384615384,
+          "f1": 0.5384615384615384,
+          "support": 13
+        },
+        "medium": {
+          "precision": 0.5,
+          "recall": 0.36363636363636365,
+          "f1": 0.42105263157894735,
+          "support": 11
+        },
+        "high": {
+          "precision": 0.9090909090909091,
+          "recall": 0.7692307692307693,
+          "f1": 0.8333333333333334,
+          "support": 13
+        }
+      },
+      "confusion_matrix": [
+        [
+          139,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          7,
+          3,
+          1
+        ],
+        [
+          1,
+          6,
+          4,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          10
+        ]
+      ]
+    },
+    "corruption": {
+      "accuracy": 0.9204545454545454,
+      "macro_precision": 0.839065995525727,
+      "macro_recall": 0.719047619047619,
+      "macro_f1": 0.7632446723231644,
+      "per_class": {
+        "none": {
+          "precision": 0.9395973154362416,
+          "recall": 1.0,
+          "f1": 0.9688581314878892,
+          "support": 140
+        },
+        "low": {
+          "precision": 0.6666666666666666,
+          "recall": 0.3333333333333333,
+          "f1": 0.4444444444444444,
+          "support": 12
+        },
+        "medium": {
+          "precision": 0.75,
+          "recall": 0.6428571428571429,
+          "f1": 0.6923076923076923,
+          "support": 14
+        },
+        "high": {
+          "precision": 1.0,
+          "recall": 0.9,
+          "f1": 0.9473684210526315,
+          "support": 10
+        }
+      },
+      "confusion_matrix": [
+        [
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          5,
+          4,
+          3,
+          0
+        ],
+        [
+          3,
+          2,
+          9,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          9
+        ]
+      ]
+    },
+    "defect": {
+      "accuracy": 0.9318181818181818,
+      "macro_precision": 0.8618421052631579,
+      "macro_recall": 0.7465753424657535,
+      "macro_f1": 0.7971662938105891,
+      "per_class": {
+        "none": {
+          "precision": 0.9473684210526315,
+          "recall": 0.9863013698630136,
+          "f1": 0.9664429530201343,
+          "support": 146
+        },
+        "low": {
+          "precision": 0.75,
+          "recall": 0.6,
+          "f1": 0.6666666666666666,
+          "support": 10
+        },
+        "medium": {
+          "precision": 0.875,
+          "recall": 0.7,
+          "f1": 0.7777777777777778,
+          "support": 10
+        },
+        "high": {
+          "precision": 0.875,
+          "recall": 0.7,
+          "f1": 0.7777777777777778,
+          "support": 10
+        }
+      },
+      "confusion_matrix": [
+        [
+          144,
+          2,
+          0,
+          0
+        ],
+        [
+          3,
+          6,
+          1,
+          0
+        ],
+        [
+          2,
+          0,
+          7,
+          1
+        ],
+        [
+          3,
+          0,
+          0,
+          7
+        ]
+      ]
+    }
+  },
+  "anomaly_detector": {
+    "task": "binary: is corruption or defect present (any severity)",
+    "threshold_used": 0.01548041496425867,
+    "roc_auc": 0.7401247401247402,
+    "precision_at_threshold": 0.5454545454545454,
+    "recall_at_threshold": 0.8307692307692308,
+    "confusion_matrix_[[tn,fp],[fn,tp]]": [
+      [
+        66,
+        45
+      ],
+      [
+        11,
+        54
+      ]
+    ]
+  },
+  "quality_label_distribution": {
+    "ACCEPTABLE": 20,
+    "DEGRADED": 139,
+    "DEFECTIVE": 17
+  },
+  "example_failure_cases": [
+    {
+      "sample_id": "00943_skimage_chelsea_combo0",
+      "issue": "blur",
+      "true": "medium",
+      "predicted": "none"
+    },
+    {
+      "sample_id": "00970_procedural_024_blur_60",
+      "issue": "blur",
+      "true": "medium",
+      "predicted": "none"
+    },
+    {
+      "sample_id": "00971_procedural_024_blur_90",
+      "issue": "blur",
+      "true": "high",
+      "predicted": "none"
+    }
+  ]
+}

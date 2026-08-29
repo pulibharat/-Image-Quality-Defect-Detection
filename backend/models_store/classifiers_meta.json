@@ -1,0 +1,41 @@
+{
+  "feature_names": [
+    "sharpness_lap_var",
+    "sharpness_tenengrad",
+    "brightness_mean",
+    "contrast_std",
+    "underexposed_ratio",
+    "overexposed_ratio",
+    "noise_sigma",
+    "colorfulness",
+    "saturation_mean",
+    "entropy",
+    "edge_density",
+    "blockiness"
+  ],
+  "issue_types": [
+    "blur",
+    "underexposure",
+    "overexposure",
+    "noise",
+    "corruption",
+    "defect"
+  ],
+  "buckets": [
+    "none",
+    "low",
+    "medium",
+    "high"
+  ],
+  "trained_at": "2026-08-29T15:39:22Z",
+  "train_samples": 682,
+  "val_samples": 132,
+  "val_accuracy": {
+    "blur": 0.8939393939393939,
+    "underexposure": 0.9848484848484849,
+    "overexposure": 0.9015151515151515,
+    "noise": 0.9318181818181818,
+    "corruption": 0.9015151515151515,
+    "defect": 0.9166666666666666
+  }
+}

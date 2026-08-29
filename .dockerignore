@@ -1,0 +1,16 @@
+env/
+**/__pycache__/
+**/*.pyc
+.pytest_cache/
+
+backend/data/
+backend/uploads/
+
+ml/data/
+evaluation/*.png
+
+.git/
+.github/
+node_modules/
+tmp_test*/
+*.log

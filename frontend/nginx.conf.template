@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Reverse-proxy API + docs + health to the backend service so the
+    # browser only ever talks to this single origin (no CORS needed).
+    # BACKEND_URL is substituted from the container environment at
+    # startup by the official nginx image's envsubst templating.
+    location /api/ {
+        proxy_pass ${BACKEND_URL}/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        client_max_body_size 20M;
+    }
+
+    location /health {
+        proxy_pass ${BACKEND_URL}/health;
+    }
+
+    location /docs {
+        proxy_pass ${BACKEND_URL}/docs;
+    }
+
+    location /openapi.json {
+        proxy_pass ${BACKEND_URL}/openapi.json;
+    }
+}
