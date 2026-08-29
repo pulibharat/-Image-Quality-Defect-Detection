@@ -18,6 +18,10 @@ RUN pip install --no-cache-dir -r /app/backend/requirements.txt
 
 COPY core /app/core
 COPY backend /app/backend
+# Present so app/main.py's static-mount fallback serves the UI from this
+# same container too -- lets a single-service platform (Render, Fly, HF
+# Spaces) deploy the whole app from just this Dockerfile, no nginx needed.
+COPY frontend /app/frontend
 
 RUN mkdir -p /app/backend/data /app/backend/uploads/images /app/backend/uploads/heatmaps
 
