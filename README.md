@@ -8,6 +8,7 @@
 ![SQLite](https://img.shields.io/badge/DB-SQLite%20%7C%20Postgres--ready-003B57?logo=sqlite&logoColor=white)
 ![No external AI APIs](https://img.shields.io/badge/External%20AI%20APIs-none-16a34a)
 ![Tests](https://img.shields.io/badge/tests-11%20passing-16a34a)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?logo=render&logoColor=white)](https://image-quality-defect-detection.onrender.com/)
 
 A full-stack application that accepts an image and automatically evaluates its visual
 quality: blur, under/over-exposure, noise, corruption/severe degradation, and visual
@@ -15,12 +16,20 @@ defects — with a quality score, a label (`ACCEPTABLE` / `DEGRADED` / `DEFECTIV
 explainable per-issue confidence. Built with **no external AI/vision APIs**: every
 detector is trained and runs locally.
 
+> ### 🚀 Live demo: **[image-quality-defect-detection.onrender.com](https://image-quality-defect-detection.onrender.com/)**
+> Deployed on Render's free tier as a single Docker service (API docs at
+> [`/docs`](https://image-quality-defect-detection.onrender.com/docs)). The free tier
+> spins down after inactivity, so the **first request after idle time can take
+> 30–60 seconds** while it cold-starts — that's Render, not the app. It also has no
+> persistent disk on this tier, so analysis history resets on redeploy/cold-start; see
+> [§1](#1-quick-start-docker-compose) to run it locally with full persistence.
+
 | | |
 |---|---|
 | **Backend** | FastAPI + SQLAlchemy + SQLite, REST API, structured JSON results, history endpoint |
 | **AI/ML** | **Hybrid** pipeline — 12 engineered image-quality features feeding six gradient-boosted classifiers (one per issue type), plus a lightweight PyTorch convolutional **autoencoder** for anomaly-detection-style explainability (reconstruction-error heatmaps) |
 | **Frontend** | Vanilla HTML/CSS/JS — drag & drop upload, batch analysis, results view with heatmap toggle, history browser, dark mode. No build step |
-| **Deployment** | Docker Compose (backend + nginx-served frontend), `/health` endpoint on both services, fully configurable via environment variables |
+| **Deployment** | Live on [Render](https://image-quality-defect-detection.onrender.com/) · locally via Docker Compose (backend + nginx-served frontend) · `/health` endpoint, fully configurable via environment variables |
 
 ## Screenshots
 
@@ -33,7 +42,7 @@ detector is trained and runs locally.
 ## Table of contents
 
 1. [Quick start (Docker Compose)](#1-quick-start-docker-compose)
-2. [Local development setup](#2-local-development-setup)
+2. [Local development setup & cloud deployment](#2-local-development-setup--cloud-deployment)
 3. [Architecture](#3-architecture)
 4. [AI / ML approach](#4-ai--ml-approach)
 5. [Dataset generation & training](#5-dataset-generation--training)
@@ -92,7 +101,7 @@ To stop: `docker compose down` (add `-v` to also wipe the DB/uploads volumes).
 
 ---
 
-## 2. Local development setup
+## 2. Local development setup & cloud deployment
 
 Requires Python 3.11+ (developed/tested on 3.13).
 
@@ -108,14 +117,40 @@ cd backend
 # ../env/bin/python -m uvicorn app.main:app --reload      # macOS/Linux
 ```
 
-Because `backend/app/main.py` mounts the `frontend/` directory as static files whenever
-it's present alongside `backend/` (skipped inside the Docker backend image, where it
-isn't copied in), **a single `uvicorn` process serves both the API and the web UI** —
-open **http://localhost:8000/**. No nginx, no separate frontend server needed for local
-dev.
+`backend/app/main.py` mounts the `frontend/` directory as static files whenever it's
+present alongside `backend/`, so **a single `uvicorn` process serves both the API and
+the web UI** — open **http://localhost:8000/**. No nginx, no separate frontend server,
+no CORS config needed for local dev.
 
 Copy `.env.example` to `backend/.env` to override defaults (upload limits, CORS, DB
 path, etc.) — `pydantic-settings` loads it automatically.
+
+### Cloud deployment (Render)
+
+The live demo above runs on [Render](https://render.com) as a **single Docker web
+service** — the same `frontend/`-mounting fallback used for local dev means the
+`backend/Dockerfile` image alone (which now also `COPY`s `frontend/` in, see the
+Dockerfile) serves the whole app with no nginx container needed in this deployment
+path. To reproduce it:
+
+1. Push this repo to GitHub (already done for the live demo).
+2. Render → **New → Web Service** → connect the repo.
+3. **Root Directory**: leave blank (build context must stay the repo root, since the
+   Dockerfile `COPY`s `core/`, `backend/`, and `frontend/` as siblings).
+4. **Language**: Docker. **Dockerfile Path**: `backend/Dockerfile` (there is no
+   Dockerfile at the repo root — this is the field most likely to be missed).
+5. **Environment variables**: none required — `MODEL_DIR`, `UPLOAD_DIR`,
+   `DATABASE_URL`, `CORS_ORIGINS` are already set via `ENV` in the Dockerfile.
+6. Compute plan: **Free** works (the model artifacts are small — six joblib
+   classifiers + a 215K-parameter CPU autoencoder); upgrade only if you hit an
+   out-of-memory error on deploy.
+7. Render auto-detects the container port from the Dockerfile's `EXPOSE 8000`.
+
+Trade-off worth knowing: Render's free tier has no persistent disk and spins the
+service down after inactivity, so the SQLite history/uploads reset on redeploy or
+cold-start (a fresh container = a fresh filesystem from the image). The app still
+works correctly every session — it just won't remember history across a cold start.
+Run it via Docker Compose (§1 above) if you want history to persist.
 
 ---
 
